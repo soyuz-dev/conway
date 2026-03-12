@@ -269,7 +269,19 @@ export default function App() {
         second: '2-digit'
     });
 
-    // Battery indicator component (no emojis)
+    // Calculate day progress percentage
+    const getDayProgress = () => {
+        const now = new Date();
+        const startOfDay = new Date(now);
+        startOfDay.setHours(0, 0, 0, 0);
+        const endOfDay = new Date(now);
+        endOfDay.setHours(23, 59, 59, 999);
+
+        const totalDayMs = endOfDay.getTime() - startOfDay.getTime();
+        const elapsedMs = now.getTime() - startOfDay.getTime();
+
+        return (elapsedMs / totalDayMs) * 100;
+    };
     const BatteryIndicator = () => {
         if (!batterySupported) {
             return <div style={{ opacity: 0.5 }}>BATTERY API NOT SUPPORTED</div>;
@@ -284,17 +296,21 @@ export default function App() {
         if (level <= 20) batteryColor = "#ff6b6b";
         else if (level <= 50) batteryColor = "#ffd966";
 
+        // Glow matches battery color when charging
+        const glow = batteryCharging ? `0 0 5px ${batteryColor}` : 'none';
+
         return (
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <div style={{ minWidth: '60px', fontSize: '12px', opacity: 0.8 }}>
                     {batteryCharging ? 'CHARGING' : 'BATTERY'}
                 </div>
-                <div style={{ flex: 1, height: '16px', backgroundColor: 'rgba(252, 172, 172, 0.2)', borderRadius: '8px', overflow: 'hidden' }}>
+                <div style={{ flex: 1, height: '16px', backgroundColor: 'rgba(252, 172, 172, 0.2)', borderRadius: '5px', overflow: 'hidden' }}>
                     <div style={{
                         width: `${level}%`,
                         height: '100%',
                         backgroundColor: batteryColor,
-                        transition: 'width 0.3s ease'
+                        transition: 'width 0.3s ease',
+                        boxShadow: glow,
                     }} />
                 </div>
                 <span style={{ minWidth: '45px', textAlign: 'right' }}>{level}%</span>
@@ -320,8 +336,8 @@ export default function App() {
             <div
                 style={{
                     position: "fixed",
-                    top: "100px",
-                    left: "100px",
+                    top: "70px",
+                    left: "5%",
                     color: "#fcacac",
                     fontFamily: "Consolas, 'Courier New', monospace",
                     zIndex: 10,
@@ -336,7 +352,7 @@ export default function App() {
                     style={{
                         backgroundColor: "rgba(0, 37, 41, 0.7)",
                         padding: "12px 24px",
-                        borderRadius: "8px",
+                        borderRadius: "5px",
                         border: "1px solid #fcacac",
                         backdropFilter: "blur(4px)",
                         letterSpacing: "1px",
@@ -355,7 +371,7 @@ export default function App() {
                     style={{
                         backgroundColor: "rgba(0, 37, 41, 0.7)",
                         padding: "12px 24px",
-                        borderRadius: "8px",
+                        borderRadius: "5px",
                         border: "1px solid #fcacac",
                         backdropFilter: "blur(4px)",
                         fontSize: "16px",
@@ -378,7 +394,7 @@ export default function App() {
                     style={{
                         backgroundColor: "rgba(0, 37, 41, 0.7)",
                         padding: "12px 24px",
-                        borderRadius: "8px",
+                        borderRadius: "5px",
                         border: "1px solid #fcacac",
                         backdropFilter: "blur(4px)",
                         fontSize: "14px",
@@ -406,6 +422,75 @@ export default function App() {
                         <div>GRID SIZE:</div>
                         <div style={{ textAlign: 'right', color: '#99ff99' }}>{COLS}×{ROWS}</div>
                     </div>
+                </div>
+            </div>
+
+            {/* Time of Day Progress Bar - Bottom */}
+            <div
+                style={{
+                    position: "fixed",
+                    bottom: "40px",
+                    left: "5%", // 5% from left gives 90% width (since 5% + 90% + 5% = 100%)
+                    width: "90%",
+                    backgroundColor: "rgba(0, 37, 41, 0.7)",
+                    backdropFilter: "blur(4px)",
+                    border: "1px solid #fcacac",
+                    borderRadius: "5px",
+                    padding: "12px 20px",
+                    color: "#fcacac",
+                    fontFamily: "Consolas, 'Courier New', monospace",
+                    zIndex: 10,
+                }}
+            >
+                <div style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    marginBottom: '8px',
+                    fontSize: '12px',
+                    letterSpacing: '1px',
+                    opacity: 0.9
+                }}>
+                    <span>TIME OF DAY</span>
+                    <span>
+                        {Math.round(getDayProgress())}%
+                    </span>
+                </div>
+
+                {/* Progress Bar Container */}
+                <div style={{
+                    width: '100%',
+                    height: '20px',
+                    backgroundColor: 'rgba(252, 172, 172, 0.15)',
+                    borderRadius: '5px',
+                    overflow: 'hidden',
+                    border: '1px solid rgba(252, 172, 172, 0.3)',
+                }}>
+                    {/* Progress Fill - Color transitions from #fcacac to #ff6b6b as day progresses */}
+                    <div style={{
+                        width: `${getDayProgress()}%`,
+                        height: '100%',
+                        background: `linear-gradient(90deg, ${'#fcacac'}, ${getDayProgress() > 66 ? '#ffd159' : '#68ff60'})`,
+                        transition: 'width 0.3s ease',
+                        boxShadow: '0 0 10px rgba(252, 172, 172, 0.5)',
+                        borderRadius: '5px'
+                    }} />
+                </div>
+
+                {/* Time markers */}
+                <div style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    marginTop: '6px',
+                    fontSize: '10px',
+                    opacity: 0.6,
+                    letterSpacing: '0.5px'
+                }}>
+                    <span>00:00</span>
+                    <span>06:00</span>
+                    <span>12:00</span>
+                    <span>18:00</span>
+                    <span>23:59</span>
                 </div>
             </div>
         </div>
