@@ -269,14 +269,14 @@ export default function App() {
         second: '2-digit'
     });
 
-    // Battery indicator component
+    // Battery indicator component (no emojis)
     const BatteryIndicator = () => {
         if (!batterySupported) {
-            return <div style={{ opacity: 0.5 }}>Battery API not supported</div>;
+            return <div style={{ opacity: 0.5 }}>BATTERY API NOT SUPPORTED</div>;
         }
 
         if (batteryLevel === null) {
-            return <div>Loading battery...</div>;
+            return <div>LOADING BATTERY...</div>;
         }
 
         const level = Math.round(batteryLevel);
@@ -286,7 +286,9 @@ export default function App() {
 
         return (
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <span>{batteryCharging ? "⚡" : "🔋"}</span>
+                <div style={{ minWidth: '60px', fontSize: '12px', opacity: 0.8 }}>
+                    {batteryCharging ? 'CHARGING' : 'BATTERY'}
+                </div>
                 <div style={{ flex: 1, height: '16px', backgroundColor: 'rgba(252, 172, 172, 0.2)', borderRadius: '8px', overflow: 'hidden' }}>
                     <div style={{
                         width: `${level}%`,
@@ -295,7 +297,7 @@ export default function App() {
                         transition: 'width 0.3s ease'
                     }} />
                 </div>
-                <span>{level}%</span>
+                <span style={{ minWidth: '45px', textAlign: 'right' }}>{level}%</span>
             </div>
         );
     };
@@ -359,7 +361,15 @@ export default function App() {
                         fontSize: "16px",
                     }}
                 >
-                    <div style={{ marginBottom: '8px', opacity: 0.8 }}>⚡ POWER STATUS</div>
+                    <div style={{
+                        marginBottom: '12px',
+                        opacity: 0.8,
+                        fontSize: '12px',
+                        letterSpacing: '1px',
+                        fontWeight: 'bold'
+                    }}>
+                        POWER STATUS
+                    </div>
                     <BatteryIndicator />
                 </div>
 
@@ -374,18 +384,26 @@ export default function App() {
                         fontSize: "14px",
                     }}
                 >
-                    <div style={{ marginBottom: '8px', opacity: 0.8 }}>🌀 SIMULATION STATS</div>
+                    <div style={{
+                        marginBottom: '12px',
+                        opacity: 0.8,
+                        fontSize: '12px',
+                        letterSpacing: '1px',
+                        fontWeight: 'bold'
+                    }}>
+                        SIMULATION STATS
+                    </div>
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '8px' }}>
-                        <div>Population:</div>
+                        <div>POPULATION:</div>
                         <div style={{ textAlign: 'right', color: '#99ff99' }}>{stats.population.toLocaleString()}</div>
 
-                        <div>Generations:</div>
-                        <div style={{ textAlign: 'right', color: '#99ff99' }}>{(stats.generation/1000).toPrecision(2).toLocaleString()}k</div>
+                        <div>GENERATIONS:</div>
+                        <div style={{ textAlign: 'right', color: '#99ff99' }}>{stats.generation.toLocaleString()}</div>
 
-                        <div>Total Spawns:</div>
+                        <div>TOTAL SPAWNS:</div>
                         <div style={{ textAlign: 'right', color: '#99ff99' }}>{stats.spawns}</div>
 
-                        <div>Grid Size:</div>
+                        <div>GRID SIZE:</div>
                         <div style={{ textAlign: 'right', color: '#99ff99' }}>{COLS}×{ROWS}</div>
                     </div>
                 </div>
