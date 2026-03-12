@@ -282,6 +282,8 @@ export default function App() {
 
         return (elapsedMs / totalDayMs) * 100;
     };
+
+    // Battery indicator component (no emojis)
     const BatteryIndicator = () => {
         if (!batterySupported) {
             return <div style={{ opacity: 0.5 }}>BATTERY API NOT SUPPORTED</div>;
@@ -296,21 +298,17 @@ export default function App() {
         if (level <= 20) batteryColor = "#ff6b6b";
         else if (level <= 50) batteryColor = "#ffd966";
 
-        // Glow matches battery color when charging
-        const glow = batteryCharging ? `0 0 5px ${batteryColor}` : 'none';
-
         return (
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <div style={{ minWidth: '60px', fontSize: '12px', opacity: 0.8 }}>
                     {batteryCharging ? 'CHARGING' : 'BATTERY'}
                 </div>
-                <div style={{ flex: 1, height: '16px', backgroundColor: 'rgba(252, 172, 172, 0.2)', borderRadius: '5px', overflow: 'hidden' }}>
+                <div style={{ flex: 1, height: '16px', backgroundColor: 'rgba(252, 172, 172, 0.2)', borderRadius: '8px', overflow: 'hidden' }}>
                     <div style={{
                         width: `${level}%`,
                         height: '100%',
                         backgroundColor: batteryColor,
-                        transition: 'width 0.3s ease',
-                        boxShadow: glow,
+                        transition: 'width 0.3s ease'
                     }} />
                 </div>
                 <span style={{ minWidth: '45px', textAlign: 'right' }}>{level}%</span>
@@ -336,8 +334,8 @@ export default function App() {
             <div
                 style={{
                     position: "fixed",
-                    top: "70px",
-                    left: "5%",
+                    top: "100px",
+                    left: "100px",
                     color: "#fcacac",
                     fontFamily: "Consolas, 'Courier New', monospace",
                     zIndex: 10,
@@ -352,7 +350,7 @@ export default function App() {
                     style={{
                         backgroundColor: "rgba(0, 37, 41, 0.7)",
                         padding: "12px 24px",
-                        borderRadius: "5px",
+                        borderRadius: "8px",
                         border: "1px solid #fcacac",
                         backdropFilter: "blur(4px)",
                         letterSpacing: "1px",
@@ -371,7 +369,7 @@ export default function App() {
                     style={{
                         backgroundColor: "rgba(0, 37, 41, 0.7)",
                         padding: "12px 24px",
-                        borderRadius: "5px",
+                        borderRadius: "8px",
                         border: "1px solid #fcacac",
                         backdropFilter: "blur(4px)",
                         fontSize: "16px",
@@ -394,7 +392,7 @@ export default function App() {
                     style={{
                         backgroundColor: "rgba(0, 37, 41, 0.7)",
                         padding: "12px 24px",
-                        borderRadius: "5px",
+                        borderRadius: "8px",
                         border: "1px solid #fcacac",
                         backdropFilter: "blur(4px)",
                         fontSize: "14px",
@@ -419,6 +417,9 @@ export default function App() {
                         <div>TOTAL SPAWNS:</div>
                         <div style={{ textAlign: 'right', color: '#99ff99' }}>{stats.spawns}</div>
 
+                        <div>FPS:</div>
+                        <div style={{ textAlign: 'right', color: stats.fps >= 25 ? '#99ff99' : '#ff9999' }}>{stats.fps}</div>
+
                         <div>GRID SIZE:</div>
                         <div style={{ textAlign: 'right', color: '#99ff99' }}>{COLS}×{ROWS}</div>
                     </div>
@@ -435,7 +436,7 @@ export default function App() {
                     backgroundColor: "rgba(0, 37, 41, 0.7)",
                     backdropFilter: "blur(4px)",
                     border: "1px solid #fcacac",
-                    borderRadius: "5px",
+                    borderRadius: "8px",
                     padding: "12px 20px",
                     color: "#fcacac",
                     fontFamily: "Consolas, 'Courier New', monospace",
@@ -452,9 +453,7 @@ export default function App() {
                     opacity: 0.9
                 }}>
                     <span>TIME OF DAY</span>
-                    <span>
-                        {Math.round(getDayProgress())}%
-                    </span>
+                    <span>{Math.round(getDayProgress())}%</span>
                 </div>
 
                 {/* Progress Bar Container */}
@@ -462,7 +461,7 @@ export default function App() {
                     width: '100%',
                     height: '20px',
                     backgroundColor: 'rgba(252, 172, 172, 0.15)',
-                    borderRadius: '5px',
+                    borderRadius: '10px',
                     overflow: 'hidden',
                     border: '1px solid rgba(252, 172, 172, 0.3)',
                 }}>
@@ -470,10 +469,9 @@ export default function App() {
                     <div style={{
                         width: `${getDayProgress()}%`,
                         height: '100%',
-                        background: `linear-gradient(90deg, ${'#fcacac'}, ${getDayProgress() > 66 ? '#ffd159' : '#68ff60'})`,
+                        background: `linear-gradient(90deg, ${'#ff6363'}, ${getDayProgress() > 66 ? '#ffde4c' : '#6fff47'})`,
                         transition: 'width 0.3s ease',
                         boxShadow: '0 0 10px rgba(252, 172, 172, 0.5)',
-                        borderRadius: '5px'
                     }} />
                 </div>
 
