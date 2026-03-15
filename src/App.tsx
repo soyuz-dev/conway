@@ -430,7 +430,7 @@ export default function App() {
             <div
                 style={{
                     position: "fixed",
-                    bottom: "30px",
+                    bottom: "80px",
                     left: "5%", // 5% from left gives 90% width (since 5% + 90% + 5% = 100%)
                     width: "90%",
                     backgroundColor: "rgba(0, 37, 41, 0.7)",
